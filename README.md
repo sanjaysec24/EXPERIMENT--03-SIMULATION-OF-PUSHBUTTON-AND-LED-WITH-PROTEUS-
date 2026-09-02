@@ -1,6 +1,6 @@
 # EXPERIMENT--03-SIMULATION-OF-PUSHBUTTON-AND-LED INTERFACE WITH ARM CONTROLLER AND PROTEUS 
-# Name : Sanjaykumar B
-# Regno : 212224230242
+# NAME : Sanjaykumar B
+# REF: 212224230242
 ## Aim: To Interface a Digital output (LED) and Digital input (Pushbutton) to ARM development board , and simulate it in Proteus 
 ## Components required: STM32 CUBE IDE, Proteus 8 simulator .
 ## Theory 
@@ -74,43 +74,39 @@ We are now at the last part of step by step guide on how to simulate STM32 proje
 
 ## STM 32 CUBE PROGRAM :
 
+
 ```
+
 #include "main.h"
-#include <stdbool.h>
-void push_button();
-bool button_status;
+#include "stdbool.h"
+
+bool PUSHBUTT;
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 
 int main(void)
 {
-
   HAL_Init();
-
   SystemClock_Config();
-
   MX_GPIO_Init();
 
   while (1)
   {
-
-	  push_button();
+    PUSHBUTT = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+    if (PUSHBUTT == 0)
+    {
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+      HAL_Delay(2000);
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+      HAL_Delay(2000);
+    }
+    else
+    {
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+      HAL_Delay(2000);
+    }
   }
-
-}
-void push_button()
-{
-	button_status=HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_13);
-	if(button_status==0)
-	{
-		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_SET);
-	}
-	else
-	{
-		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_RESET);
-
-	}
 }
 
 void SystemClock_Config(void)
@@ -147,22 +143,20 @@ static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 
-  GPIO_InitStruct.Pin = GPIO_PIN_13;
+  GPIO_InitStruct.Pin = GPIO_PIN_0;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   GPIO_InitStruct.Pin = GPIO_PIN_5;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
 }
 
 void Error_Handler(void)
@@ -174,10 +168,8 @@ void Error_Handler(void)
 }
 
 #ifdef  USE_FULL_ASSERT
-
 void assert_failed(uint8_t *file, uint32_t line)
 {
-  
 }
 #endif
 
@@ -186,19 +178,14 @@ void assert_failed(uint8_t *file, uint32_t line)
 
 ## Output screen shots of proteus  :
 
-# OFF:
-<img width="634" height="760" alt="365666748-7f380ccd-5059-4ac5-8573-0ae8a3968223" src="https://github.com/user-attachments/assets/0becaedd-0efd-427d-9b9d-56fcd8ca0be0" />
 
-# ON:
-<img width="572" height="760" alt="365672379-f3e2e21e-f1f1-47fc-bee7-ed1f602845cc" src="https://github.com/user-attachments/assets/61b79e47-e98d-4ac8-85ad-e044cb3632f9" />
-
-
-
+<img width="1580" height="938" alt="image" src="https://github.com/user-attachments/assets/6e94d16d-9597-4170-9684-66298aeadc60" />
 
 ## Proteus layout(Add pdf screen shot of circuit here)
  
+ <img width="1503" height="907" alt="image" src="https://github.com/user-attachments/assets/39126470-3e30-4ff6-bf3f-9d370eda540b" />
+
  
- <img width="930" height="963" alt="365666542-15742efa-5845-4126-b137-c84b23ab363c" src="https://github.com/user-attachments/assets/ce8d4e1a-831d-49c4-9c13-ae9a897b2aa4" />
  
 ## Result :
 Interfacing a digital output and digital input  with ARM microcontroller are simulated in proteus and the results are verified.
